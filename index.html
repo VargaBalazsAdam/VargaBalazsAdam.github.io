@@ -21,6 +21,7 @@
             height: 300px;
             margin-bottom: 20px;
             background-color: #000;
+            cursor: pointer;
         }
 
         #gif-frame {
@@ -46,7 +47,6 @@
             color: #ccc;
         }
 
-        /* Modal stílus */
         .modal {
             display: none;
             position: fixed;
@@ -97,14 +97,15 @@
     </div>
 
     <button id="unlock-btn">Küldd el nekem!</button>
-    <div id="hint">Nyomd meg az Entert a töltéshez!</div>
+    <div id="hint">Kattints a képre a töltéshez!</div>
 
-    <!-- Modal -->
     <div id="form-modal" class="modal">
         <div class="modal-content">
             <span class="close" id="close-modal">&times;</span>
             <iframe
-                src="https://docs.google.com/forms/d/e/1FAIpQLSejwBMo4ISI1NyKE3TCV3nwLBk2ZTzPa97AmTCMBB2lai3Z0g/viewform?usp=preview">Töltés...</iframe>
+                src="https://docs.google.com/forms/d/e/1FAIpQLSejwBMo4ISI1NyKE3TCV3nwLBk2ZTzPa97AmTCMBB2lai3Z0g/viewform?usp=pp_url">
+                Töltés...
+            </iframe>
         </div>
     </div>
 
@@ -117,23 +118,24 @@
             return `frames/frame_${num}_delay-0.09s.png`;
         }
 
-        document.addEventListener("keydown", (event) => {
-            if (event.key === "Enter") {
-                if (currentFrame < totalFrames - 1) {
-                    currentFrame++;
-                    document.getElementById("gif-frame").src = getFrameFilename(currentFrame);
-                }
+        const gifContainer = document.getElementById("gif-container");
+        const gifFrame = document.getElementById("gif-frame");
+        const unlockBtn = document.getElementById("unlock-btn");
+        const hint = document.getElementById("hint");
 
-                if (currentFrame === totalFrames - 1) {
-                    document.getElementById("unlock-btn").style.display = "inline-block";
-                    document.getElementById("hint").textContent = "Kész! A pohár csordultig.";
-                }
+        gifContainer.addEventListener("click", () => {
+            if (currentFrame < totalFrames - 1) {
+                currentFrame++;
+                gifFrame.src = getFrameFilename(currentFrame);
+            }
+
+            if (currentFrame === totalFrames - 1) {
+                unlockBtn.style.display = "inline-block";
+                hint.textContent = "Kész! A pohár csordultig.";
             }
         });
 
-        // Modal logika
         const modal = document.getElementById("form-modal");
-        const unlockBtn = document.getElementById("unlock-btn");
         const closeBtn = document.getElementById("close-modal");
 
         unlockBtn.onclick = () => {
